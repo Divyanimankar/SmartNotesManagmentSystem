@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - NotesManagementSystem</title>
+    <link rel="stylesheet" href="/SmartNotesManagmentSystem/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>📝 Notes Management System</h2>
+    <h3 style="text-align:center; color:#666; margin-bottom:20px;">Create Account</h3>
+
+    <div id="msgBox"></div>
+
+    <form action="/SmartNotesManagmentSystem/registerServlet" method="post">
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Enter Full Name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="example@gmail.com" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="password" required>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="link">
+         <a href="login.html">Login </a>
+    </div>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('msg') === 'error') {
+        document.getElementById('msgBox').innerHTML = '<div class="msg-error">Registration failed. Please try again.</div>';
+    }
+</script>
+
+</body>
+</html>

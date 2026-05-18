@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+    <title>Add Note - Notes Management System</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+    .modal-overlay {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:999;
+    justify-content:center;
+    align-items:center;
+}
+.modal-overlay.show { display:flex; }
+.modal-box {
+    background:white;
+    border-radius:16px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 10px 40px rgba(0,0,0,0.2);
+    animation:popIn 0.3s ease;
+    max-width:350px;
+    width:90%;
+}
+@keyframes popIn {
+    from { transform:scale(0.7); opacity:0; }
+    to   { transform:scale(1);   opacity:1; }
+}
+.modal-icon { font-size:60px; margin-bottom:15px; }
+.modal-title { font-size:22px; font-weight:600; color:#2c3e50; margin-bottom:8px; }
+.modal-msg { color:#666; font-size:15px; margin-bottom:25px; }
+.modal-btn {
+    background:#3498db;
+    color:white;
+    border:none;
+    padding:12px 35px;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+}
+.modal-btn:hover { background:#2980b9; }
+    
+    </style>
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+</head>
+
+<script>
+    fetch('/SmartNotesManagmentSystem/ViewNotesServlet', {
+        method: 'GET',
+        redirect: 'manual'
+    }).then(function(res) {
+        if (res.type === 'opaqueredirect' || res.status === 0) {
+            window.location.replace('/SmartNotesManagmentSystem/html/login.html');
+        }
+    });
+
+    window.history.pushState(null, '', window.location.href);
+    window.history.pushState(null, '', window.location.href);
+    window.history.pushState(null, '', window.location.href);
+    window.onpopstate = function() {
+        window.history.pushState(null, '', window.location.href);
+        fetch('/SmartNotesManagmentSystem/ViewNotesServlet', {
+            method: 'GET',
+            redirect: 'manual'
+        }).then(function(res) {
+            if (res.type === 'opaqueredirect' || res.status === 0) {
+                window.location.replace('/SmartNotesManagmentSystem/html/login.html');
+            }
+        });
+    };
+</script>
+<body>
+
+<div class="navbar">
+    <h2>📝 Smart Notes Manager</h2>
+    <div>
+        <a href="../../ViewNotesServlet">My Notes</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="../../LogoutServlet">Logout</a>
+    </div>
+</div>
+
+<div class="container" style="margin-top:40px;">
+    <h2>➕ Add New Note</h2>
+
+    <div id="msgBox"></div>
+
+    <form action="/SmartNotesManagmentSystem/AddNoteServlet" method="post">
+    	
+        <label>Subject</label>
+        <input type="text" name="subject" placeholder="e.g. Mathematics, Science" required>
+
+        <label>Title</label>
+        <input type="text" name="title" placeholder="Note title" required>
+
+        <label>Content</label>
+        <textarea name="content" placeholder="Write your note here..." required></textarea>
+
+        <button type="submit">Save Note</button>
+        <a href="/SmartNotesManagmentSystem/html/dashboard.html" style="display:block; text-align:center; margin-top:10px; color:#95a5a6; text-decoration:none; font-size:16px; background-color:#3498db; color:white; padding:13px; border-radius: 8px; ">← Cancel</a>
+       
+    </form>
+
+    <!--  <div class="link">
+        <a href="../../ViewNotesServlet">← All Notes</a>
+    </div>-->
+</div>
+<div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+        <div class="modal-icon">✅</div>
+        <div class="modal-title">Note Saved!</div>
+        <button class="modal-btn" onclick="goToDashboard()">OK</button>
+    </div>
+</div>
+
+
+<!--  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('msg') === 'error') {
+        document.getElementById('msgBox').innerHTML = '<div class="msg-error">Note save failed. Please try again.</div>';
+    }
+</script>>-->
+
+ <script>
+ function goToDashboard() {
+	    window.location.href = '/SmartNotesManagmentSystem/html/dashboard.html';
+	}
+
+	const params = new URLSearchParams(window.location.search);
+
+	if (params.get('msg') === 'success') {
+	    document.getElementById('successModal').classList.add('show');
+	    setTimeout(goToDashboard, 3000);
+	}
+
+	if (params.get('msg') === 'error') {
+	    document.getElementById('msgBox').innerHTML =
+	        '<div class="msg-error">❌ Note save failed. Please try again.</div>';
+	}
+		
+</script>
+
+</body>
+</html>
